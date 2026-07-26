@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { PropsWithChildren } from "react";
@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Shawqi Stack",
+  title: "Next.JS One Day Introduction For React Developers",
   description: "Created by @shawqicauses.",
 };
 
