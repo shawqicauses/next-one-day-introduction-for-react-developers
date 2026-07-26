@@ -1,7 +1,9 @@
-// REVIEWED - 03
+// REVIEWED - 04
+
+import { redirect } from "next/navigation";
 
 const HomePage = function HomePage() {
-  return <main>Shawqi Stack</main>;
+  redirect("/examples");
 };
 
 export default HomePage;
