@@ -1,4 +1,4 @@
-<!-- REVIEWED - 02 -->
+<!-- REVIEWED - 03 -->
 
 # Introduction to Next.js
 
@@ -326,7 +326,7 @@ Do not read the directive as a per-component label. The docs are precise. It dec
 
 The boundary is sticky. Once a file carries the directive, "all of its imports and the components it directly renders are included in the client bundle." That has a convenient flip side. In the docs' words, "you don't need to add the directive to every component that is intended for the client." Mark the entry file. Its imports follow.
 
-When do you reach for it? The docs' own list is your daily work: state and event handlers like `onClick` and `onChange`, lifecycle logic like `useEffect`, browser-only APIs like `localStorage` and `window`, and custom hooks. Your `useState` and `useEffect` code lives happily behind this boundary, unchanged.
+When do you reach for it? The docs' own list is your daily work: state and event handlers like `onClick` and `onChange`, life-cycle logic like `useEffect`, browser-only APIs like `localStorage` and `window`, and custom hooks. Your `useState` and `useEffect` code lives happily behind this boundary, unchanged.
 
 ```tsx
 "use client";
@@ -760,7 +760,7 @@ For child components there is `useFormStatus` from react-dom. It "gives you stat
 
 ### After the write
 
-Your write landed. The pages showing that data do not know yet. Four tools close the gap, all inside the action, and one response can carry "both the updated UI and new data in a single server roundtrip".
+Your write landed. The pages showing that data do not know yet. Four tools close the gap, all inside the action, and one response can carry "both the updated UI and new data in a single server round trip".
 
 `refresh()` covers the current view. "refresh allows you to refresh the client router from within a Server Action." Use it when the view depends on state outside the cache. It "does not revalidate tagged data."
 
