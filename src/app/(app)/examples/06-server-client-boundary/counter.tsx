@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 "use client";
 
@@ -17,7 +17,7 @@ const Counter = function Counter({ startAt }: { startAt: number }) {
       <p className="mb-2">Count: {count}</p>
       <button
         type="button"
-        // there is a bad practice here in the state update :) could you guess what it is?
+        // There is a bad practice in this state update. Can you spot it?
         onClick={() => setCount(count + 1)}
         className="rounded border border-gray-300 px-3 py-1 text-sm">
         Add one

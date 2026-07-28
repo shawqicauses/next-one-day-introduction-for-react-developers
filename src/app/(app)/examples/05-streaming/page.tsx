@@ -1,5 +1,6 @@
-// REVIEWED
+// REVIEWED - 01
 
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 // STREAMING.
@@ -7,9 +8,9 @@ import { Suspense } from "react";
 // shell first, then streams each Suspense boundary in when its
 // content is ready. Every boundary is an independent streaming
 // point.
-// Note: pnpm build pre-renders this page because nothing here reads
-// request data, so the delay runs once at build time. Run pnpm dev
-// to watch the stream happen per request.
+// Note: awaiting connection() below marks this page as request-time
+// work, so it renders and streams per request in production too,
+// not only in pnpm dev.
 
 const wait = function wait(ms: number) {
   return new Promise((resolve) => {
@@ -28,6 +29,7 @@ const SlowPart = async function SlowPart() {
 // loading.tsx is visible. Without this await the page renders
 // instantly and the route-level fallback never appears.
 const StreamingPage = async function StreamingPage() {
+  await connection();
   await wait(800);
 
   return (

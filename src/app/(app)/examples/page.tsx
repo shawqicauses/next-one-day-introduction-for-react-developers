@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Link from "next/link";
 
@@ -83,13 +83,13 @@ const examples = [
     href: "/examples/13-metadata",
     title: "13 Metadata",
     description: "generateMetadata writes the title and the open graph tags.",
-    module: "Module 8, the daily tool-kit",
+    module: "Module 8, polish",
   },
   {
     href: "/examples/14-image-font",
     title: "14 Image and font",
     description: "next/image sizing and a self-hosted Google font.",
-    module: "Module 8, the daily tool-kit",
+    module: "Module 8, polish",
   },
   {
     href: "/examples/15-providers",

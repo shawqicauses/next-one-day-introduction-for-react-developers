@@ -1,38 +1,39 @@
-<!-- REVIEWED -->
+<!-- REVIEWED - 01 -->
 
 # Introduction to Next.js
 
 ![The workshop introduction slide](./slides/slide-01-intro.png)
 
-A one day live workshop under the PCX umbrella. I am Shawqi Hatem, and I built this day for React developers who have not made the move to Next.js, or who made it and still feel unsure about what runs where. My goal is simple. Remove the fear of moving from React to Next.js by building the right mental model, not by covering everything.
+Welcome. My name is Shawqi Hatem, and this is a full workshop on Next.js. I built it for you. You know React. You have not moved to Next.js yet, or you moved and you still feel unsure about what runs where. My goal is simple. Remove the fear of moving from React to Next.js by building the right mental model, not by covering everything.
 
-The workshop leans on three things. This document carries the full content. Thirteen anchor slides carry the day, one for the introduction, one per module, and one for the close, and they are embedded through this document. And this repo carries runnable examples for every concept, one route per idea.
+Three things carry this workshop. You get every word of this in writing, so nothing depends on your notes. You get a slide for each module. And you get a repo with a runnable example for every idea we cover, one route per idea.
 
-## How to read this document
+## How this workshop runs
 
-Each module opens with its minute budget and its goal. Every module closes with a references list. Sources carry tiers. T1 is official framework and platform docs, nextjs.org, react.dev, and nodejs.org. T2 is MDN. T3 is vendor docs like Vercel and AWS. I verified every technical claim in this document against the live pages listed in the references on 2026-07-25, with Next.js at 16.2.12 and React at 19.2.8.
+Every module has a time budget, a goal, and a reference list at the end so you can check me. Everything I claim comes from official documentation. In those lists T1 means the official docs, nextjs.org, react.dev, and nodejs.org. T2 means MDN. T3 means a vendor page, and I use one only where the vendor is the only source. I checked every claim against the live pages on 2026-07-25, with Next.js at 16.2.12 and React at 19.2.8.
 
 ## Schedule
 
-| Block                                        | Minutes |
-| -------------------------------------------- | ------- |
-| Module 1: Welcome and framing                | 20      |
-| Module 2: Why Next.js and the myths          | 25      |
-| Module 3: From React to Next.js              | 55      |
-| Break                                        | 10      |
-| Module 4: Rendering patterns                 | 65      |
-| Module 5: Guardrails, errors and not found   | 25      |
-| Break                                        | 10      |
-| Module 6: Mutations with Server Functions    | 55      |
-| Module 7: State and providers                | 30      |
-| Break                                        | 10      |
-| Module 8: Polish, metadata to env            | 35      |
-| Module 9: Traditional servers and serverless | 40      |
-| Break                                        | 10      |
-| Module 10: Hands-on, recap and capstone      | 45      |
-| Module 11: Close                             | 20      |
+| Module                                            | Minutes |
+| ------------------------------------------------- | ------- |
+| Module 1: Welcome and framing                     | 20      |
+| Module 2: Why Next.js and the myths               | 25      |
+| Module 3: From React to Next.js, the mental model | 55      |
+| Module 4: Rendering patterns                      | 65      |
+| Module 5: Guardrails, errors and not found        | 25      |
+| Module 6: Mutations with Server Functions         | 55      |
+| Module 7: State and providers                     | 30      |
+| Module 8: Polish, metadata to env                 | 35      |
+| Module 9: Traditional servers and serverless      | 40      |
+| Module 10: Hands-on recap                         | 45      |
+| Module 11: What comes next                        | 20      |
 
-The total is 455 minutes, 7 hours and 35 minutes of wall clock with breaks included. The ceiling is 8 hours. If the day runs long, the module 10 capstone flexes first. Module 4 and module 6 never do.
+That is 415 minutes of content. We run it in two hour sessions, with a short break inside each one. Four sessions is the tight cut. Five sessions is the comfortable one, and the extra time goes to your questions and the exercises. If a session runs long, we take the time from module 10. Rendering and mutations keep their full time.
+
+| Sessions | The split                                                        |
+| -------- | ---------------------------------------------------------------- |
+| Four     | 1 to 3, then 4 and 5, then 6 to 8, then 9 to 11                  |
+| Five     | 1 to 3, then 4 and 5, then 6 and 7, then 8 and 9, then 10 and 11 |
 
 ## Module 1: Welcome and framing (20 minutes)
 
@@ -40,7 +41,7 @@ The total is 455 minutes, 7 hours and 35 minutes of wall clock with breaks inclu
 
 ### Module 1 goal
 
-By the end of this module you know what this workshop is and what it is not. It is a one day workshop for React developers who want to move to Next.js without fear. It is not a complete course, and we say plainly which parts we leave out.
+By the end of this module you know what this workshop is and what it is not. Its job is to get you from React to Next.js without fear. It is not a complete course, and I name plainly which parts we leave out.
 
 ### How to follow along
 
@@ -61,19 +62,19 @@ pnpm install
 pnpm dev
 ```
 
-You will type today. The short labs inside the modules and the capstone at the end all run in this repo. You can also just watch. Every step we type is in this document, so you can replay it on your own after the session.
+You will type. Every lab runs in this repo. You can also just watch. You get every step in writing, so you can replay everything on your own.
 
-### Module 1 in the repo
+### In the repo
 
-The repo is open in the editor and `pnpm dev` is running. The day starts at `/examples`, the numbered nav, one link per example, 01 to 15, in the order the day follows. The nav lives in `src/app/(app)/examples/layout.tsx`. This index is home base. Every module returns here, and every step typed today is also written in this document.
+Open the repo in your editor and start the dev server. We start at `/examples`. It is a numbered nav, one link per example, 01 to 15, in the order we follow. The nav lives in `src/app/(app)/examples/layout.tsx`. This index is home base. We come back here in every module.
 
-### Why one full day
+### Why an introduction
 
-One day is not enough to master Next.js. We will not pretend otherwise. This workshop is an introduction, and its one job is to remove the fear of moving from React to Next.js.
+This workshop is not enough to master Next.js. We will not pretend otherwise. It is an introduction, and its one job is to remove the fear of moving from React to Next.js.
 
-That fear usually comes from a missing mental model, not from missing years of practice. A day is enough to build the model and to practice the daily toolkit around it. You leave knowing what Next.js is, what it is not, how it thinks, where your React knowledge fits, and what to reach for when you hit the common walls. You do not leave an expert. Nobody does after one day.
+That fear usually comes from a missing mental model, not from missing years of practice. A few focused sessions are enough to build the model and to practice the daily tool kit around it. You leave knowing what Next.js is, what it is not, how it thinks, where your React knowledge fits, and what to reach for when you hit the common walls. You do not leave an expert. Nobody does after an introduction.
 
-So we make a trade. We go deep on the model, we practice it the same day, and we stay honest about what we skip. The next section names every skipped topic out loud, so you never have to guess whether a gap is yours or ours.
+So we make a trade. We go deep on the model, we practice it right away, and we stay honest about what we skip. Next I name every topic we skip, so you never have to guess whether a gap is yours or ours.
 
 ### What we cover and what we skip
 
@@ -87,19 +88,21 @@ We cover one arc, start to finish.
 6. State. What moves to the server and what stays client state.
 7. Polish. Metadata, images, and fonts.
 8. Traditional servers and serverless, and what that choice changes.
-9. A hands-on capstone that migrates a small React SPA.
+9. A hands-on recap that breaks the examples on purpose and fixes them.
 
-We skip four things. Each gets one line so you know it exists.
+We skip four things. I name each one so you know it exists.
 
-- Authentication. Real apps need it, and we do not build it today. Module 11 points you to the path.
-- Testing. Out of scope for this day. Module 11 has the pointer.
-- Deployment pipelines. We explain hosting models, we do not wire up a pipeline. Module 11 has the pointer.
-- Deep caching. We name the idea and stop there. Module 11 has the pointer.
+- Authentication. Real apps need it, and we do not build it here.
+- Testing. Out of scope for this workshop.
+- Deployment pipelines. We explain hosting models, we do not wire up a pipeline.
+- Deep caching. We teach everyday revalidation and skip the cacheComponents model.
+
+We close with where to go for all four.
 
 ### Module 1 references
 
-- Next.js installation requirements: <https://nextjs.org/docs/app/getting-started/installation>
-- Next.js current major version: <https://nextjs.org/>
+- T1 Next.js installation requirements: <https://nextjs.org/docs/app/getting-started/installation>
+- T1 Next.js current major version: <https://nextjs.org/>
 
 ## Module 2: Why Next.js and the myths (25 minutes)
 
@@ -113,7 +116,7 @@ By the end of this module you can explain why React itself points you toward a f
 
 React is a UI library. It gives you components, and components are the whole offer. Routing is not included. Data fetching is not included. Rendering infrastructure is not included. That is not a criticism. It is React's own framing.
 
-The React docs carry a page called "Build a React app from Scratch". It walks through routing, data fetching, and code-splitting as problems you must solve yourself. It warns that "the way you develop routing, data-fetching, and other features will be unique to your situation", which makes help harder to find. Its own deep dive is blunt about where this ends: "going this route is often the same as building your own adhoc framework". The spelling is theirs.
+The React docs carry a page called "Build a React app from Scratch". It walks through routing, data fetching, and code-splitting as problems you must solve yourself. It warns that "the way you develop routing, data-fetching, and other features will be unique to your situation", which makes help harder to find. Its own deep dive is blunt about where this ends: "going this route is often the same as building your own adhoc framework". That spelling is theirs, not a typo.
 
 The rendering line is even more direct: "if in the future your app needs support for server-side rendering (SSR), static site generation (SSG), and/or React Server Components (RSC), you will have to implement those on your own".
 
@@ -125,9 +128,7 @@ This advice does not come from Vercel. It comes from react.dev. The page "Creati
 
 The page then lists full-stack frameworks, and Next.js is first in that list. React describes it like this: "Next.js's App Router is a React framework that takes full advantage of React's architecture to enable full-stack React apps."
 
-Read the wording again. Full-stack React apps. That is React talking, not marketing. React also explains why frameworks are the recommendation: "The frameworks we recommend have built-in solutions for these problems." The problems in question are routing, data fetching, and common usage patterns. Exactly the gaps from the previous section.
-
-Source: <https://react.dev/learn/creating-a-react-app>
+Read the wording again. Full-stack React apps. That is React talking, not marketing. React also explains why frameworks are the recommendation: "The frameworks we recommend have built-in solutions for these problems." The problems in question are routing, data fetching, and common usage patterns. Exactly the gaps I just named.
 
 ### Myth one: Next.js is only an SEO fix
 
@@ -141,13 +142,13 @@ SEO support is real and first class. The metadata page says "The Metadata APIs c
 
 Four features in the docs say otherwise. Each one runs on the server.
 
-Route handlers. "Route Handlers allow you to create custom request handlers for a given route using the Web Request and Response APIs." A route file is a server endpoint. It answers GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS.
+Start with route handlers. A route file is a server endpoint, and the docs say so plainly. "Route Handlers allow you to create custom request handlers for a given route using the Web Request and Response APIs." It answers GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS.
 
-Server Functions. "A Server Function is an asynchronous function that runs on the server. You can call them from the client through a network request". Your client code calls a function. The body runs on the server.
+Next, Server Functions. "A Server Function is an asynchronous function that runs on the server. You can call them from the client through a network request". Your client code calls a function. The body runs on the server.
 
-Proxy. "The proxy.js|ts file is used to write Proxy and run code on the server before a request is completed." You may know this file by its old name. The docs state "The middleware file convention is deprecated and has been renamed to proxy."
+Then the proxy file. It runs your code on the server before a request is completed. If you have seen Next.js code before, you may know this file by its old name. The docs state "The middleware file convention is deprecated and has been renamed to proxy."
 
-Server Components. "By default, layouts and pages are Server Components, which lets you fetch data and render parts of your UI on the server". One listed benefit: "Use API keys, tokens, and other secrets without exposing them to the client".
+And Server Components. "By default, layouts and pages are Server Components, which lets you fetch data and render parts of your UI on the server". One listed benefit matters most here. "Use API keys, tokens, and other secrets without exposing them to the client".
 
 A front-end framework can't keep a secret, because everything it has ships to the browser. Next.js keeps secrets on the server. The docs call it exactly what it is, "a React framework for building full-stack web applications".
 
@@ -171,17 +172,17 @@ The support table on that page marks the Node.js server and the Docker container
 
 ### Module 2 references
 
-- React, Creating a React App: <https://react.dev/learn/creating-a-react-app>
-- React, Build a React app from Scratch: <https://react.dev/learn/build-a-react-app-from-scratch>
-- Next.js docs landing page: <https://nextjs.org/docs>
-- Next.js homepage: <https://nextjs.org/>
-- Next.js Getting Started index: <https://nextjs.org/docs/app/getting-started>
-- Next.js metadata and OG images: <https://nextjs.org/docs/app/getting-started/metadata-and-og-images>
-- Next.js route handlers file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/route>
-- Next.js mutating data: <https://nextjs.org/docs/app/getting-started/mutating-data>
-- Next.js proxy file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/proxy>
-- Next.js server and client components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
-- Next.js deploying: <https://nextjs.org/docs/app/getting-started/deploying>
+- T1 React, Creating a React App: <https://react.dev/learn/creating-a-react-app>
+- T1 React, Build a React app from Scratch: <https://react.dev/learn/build-a-react-app-from-scratch>
+- T1 Next.js docs landing page: <https://nextjs.org/docs>
+- T1 Next.js homepage: <https://nextjs.org/>
+- T1 Next.js Getting Started index: <https://nextjs.org/docs/app/getting-started>
+- T1 Next.js metadata and OG images: <https://nextjs.org/docs/app/getting-started/metadata-and-og-images>
+- T1 Next.js route handlers file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/route>
+- T1 Next.js mutating data: <https://nextjs.org/docs/app/getting-started/mutating-data>
+- T1 Next.js proxy file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/proxy>
+- T1 Next.js server and client components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
+- T1 Next.js deploying: <https://nextjs.org/docs/app/getting-started/deploying>
 
 ## Module 3: From React to Next.js, the mental model (55 minutes)
 
@@ -191,13 +192,11 @@ The support table on that page marks the Node.js server and the Docker container
 
 By the end of this module you can explain what changes when your React SPA becomes a Next.js app, and what stays the same. Four ideas do the work. Folders become routes. Layouts wrap pages. Navigation stays client-side. Components run on the server unless you say otherwise. Nothing here asks you to unlearn React.
 
-Timing guide: about 20 minutes for routing, layouts, and dynamic segments with live folder building, 12 minutes for navigation in both forms, 15 minutes for the server and client boundary plus data fetching, and 8 minutes in the repo.
-
 ### The SPA you already know
 
 Start from your current world. A classic React SPA is one `index.html` file and one JavaScript bundle. The server returns the same nearly empty page for every URL. The browser downloads the bundle, React mounts, and from then on everything happens on the client. A router library reads the URL and swaps components. Your components fetch data from the browser, usually in effects or through a data library. State lives in the tab.
 
-This model is not wrong. It gives you instant transitions and an app-like feel, and it is the baseline for everything today. Hold on to it. Next.js keeps the parts of it you like.
+This model is not wrong. It gives you instant transitions and an app-like feel, and it is the baseline for everything that follows. Hold on to it. Next.js keeps the parts of it you like.
 
 ### Folders become routes
 
@@ -217,7 +216,7 @@ app/
 
 One rule keeps you safe. A folder becomes a public route only when it holds a `page` or `route` file. The project structure docs state that a route is "not publicly accessible" until a `page.js` or `route.js` file is added to the segment. So you can colocate components, helpers, and tests inside `app` without creating accidental pages.
 
-The `[slug]` folder in the tree is a dynamic segment. It gets its own section next.
+The `[slug]` folder in the tree is a dynamic segment. We look at it next.
 
 You already think in component trees. The route tree is now a folder tree you can read in your editor.
 
@@ -241,9 +240,9 @@ export default async function BlogPostPage({
 }
 ```
 
-Copy-pasted Next.js 13 or 14 snippets read `params.slug` without the await. They break on 16. The await is the fix.
+The Next.js 13 and 14 snippets you will find online read `params.slug` without the await. They break on 16. The await is the fix.
 
-Two closing notes. When you can list the slugs ahead of time, `generateStaticParams` pre-renders one page per slug at build time. And when the slug matches nothing, you call `notFound()` and hand the request to the 404 path, which Module 5 covers in full.
+Two more things before we move on. When you can list the slugs ahead of time, `generateStaticParams` pre-renders one page per slug at build time. And when the slug matches nothing, you call `notFound()` and hand the request to the 404 path, which Module 5 covers in full.
 
 ### Layouts wrap pages
 
@@ -275,7 +274,7 @@ Two mechanisms preserve the SPA feel:
 - Prefetching. "Prefetching is the process of loading a route in the background before the user navigates to it." Next.js prefetches routes linked with `Link` automatically when the links enter the viewport. By the time your user clicks, much of the next page is already there.
 - Client-side transitions. The docs describe the old alternative first: a full page load "clears state, resets scroll position, and blocks interactivity." Next.js skips that. It updates the content in place and keeps shared layouts mounted.
 
-The docs draw the exact conclusion this module is built on. Client-side transitions are what make a server-rendered app feel like a client-rendered app. You move rendering to the server and give up nothing about how navigation feels.
+The docs land on the same conclusion I want you to take from this hour. Client-side transitions are what make a server-rendered app feel like a client-rendered app. You move rendering to the server and give up nothing about how navigation feels.
 
 ### Navigate with code
 
@@ -367,30 +366,30 @@ Almost everything you own. The docs define the relationship in one line: "Next.j
 
 You are learning this on Next.js 16, released in October 2025. Turbopack "has reached stability for both development and production builds" and is the default bundler for new projects. Caching became "entirely opt-in" through the new Cache Components model, and `proxy.ts` replaces `middleware.ts`. Node.js 18 is no longer supported, the minimum is now 20.9. The App Router includes the React 19.2 features, delivered through its built-in React canary release.
 
-### Module 3 in the repo (8 minutes)
+### In the repo (8 minutes)
 
-1. Visit `/examples/10-dynamic-route` and follow both links. The URL slug changes while one `[slug]` folder serves every page.
-2. Edit the URL to a slug that does not exist. The 404 path takes over. Module 5 shows the file behind it.
+1. Visit `/examples/10-dynamic-route` and follow the two known slugs. The URL slug changes while one `[slug]` folder serves every page.
+2. Click the third link, the slug that does not exist. The 404 path takes over. Module 5 shows the file behind it.
 3. Open `src/app/(app)/examples/10-dynamic-route/[slug]/page.tsx`. The `const { slug } = await params` line is the Next.js 16 shape. Pasted 13 or 14 snippets break without it.
 4. Visit `/examples/09-data-fetching` and view the page source. The list sits in the raw HTML. Open `src/app/(app)/examples/09-data-fetching/page.tsx`. The async component awaits `getPosts`. No effect and no loading flag.
 
 ### Module 3 references
 
-- Next.js docs overview: <https://nextjs.org/docs>
-- Installation: <https://nextjs.org/docs/app/getting-started/installation>
-- Project structure: <https://nextjs.org/docs/app/getting-started/project-structure>
-- Layouts and pages: <https://nextjs.org/docs/app/getting-started/layouts-and-pages>
-- Linking and navigating: <https://nextjs.org/docs/app/getting-started/linking-and-navigating>
-- useRouter: <https://nextjs.org/docs/app/api-reference/functions/use-router>
-- usePathname: <https://nextjs.org/docs/app/api-reference/functions/use-pathname>
-- useSearchParams: <https://nextjs.org/docs/app/api-reference/functions/use-search-params>
-- redirect: <https://nextjs.org/docs/app/api-reference/functions/redirect>
-- Server and Client Components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
-- The use client directive: <https://nextjs.org/docs/app/api-reference/directives/use-client>
-- Fetching data: <https://nextjs.org/docs/app/getting-started/fetching-data>
-- Next.js glossary: <https://nextjs.org/docs/app/glossary>
-- Next.js 16 release post: <https://nextjs.org/blog/next-16>
-- React Quick Start: <https://react.dev/learn>
+- T1 Next.js docs overview: <https://nextjs.org/docs>
+- T1 Installation: <https://nextjs.org/docs/app/getting-started/installation>
+- T1 Project structure: <https://nextjs.org/docs/app/getting-started/project-structure>
+- T1 Layouts and pages: <https://nextjs.org/docs/app/getting-started/layouts-and-pages>
+- T1 Linking and navigating: <https://nextjs.org/docs/app/getting-started/linking-and-navigating>
+- T1 useRouter: <https://nextjs.org/docs/app/api-reference/functions/use-router>
+- T1 usePathname: <https://nextjs.org/docs/app/api-reference/functions/use-pathname>
+- T1 useSearchParams: <https://nextjs.org/docs/app/api-reference/functions/use-search-params>
+- T1 redirect: <https://nextjs.org/docs/app/api-reference/functions/redirect>
+- T1 Server and Client Components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
+- T1 The use client directive: <https://nextjs.org/docs/app/api-reference/directives/use-client>
+- T1 Fetching data: <https://nextjs.org/docs/app/getting-started/fetching-data>
+- T1 Next.js glossary: <https://nextjs.org/docs/app/glossary>
+- T1 Next.js 16 release post: <https://nextjs.org/blog/next-16>
+- T1 React Quick Start: <https://react.dev/learn>
 
 ## Module 4: Rendering patterns (65 minutes)
 
@@ -404,7 +403,7 @@ By the end of this hour you can answer one question for any route you build. You
 
 Every rendering pattern is an answer to the same question. Where does the HTML come from, and when is it made.
 
-Some routes make HTML at build time. Some make it on the server for every request. Some make it in the browser. Some make it once and refresh it in the background. Some send it in pieces. That is the whole module. Five answers to one question.
+Some routes make HTML at build time. Some make it on the server for every request. Some make it in the browser. Some make it once and refresh it in the background. Some send it in pieces. That is the whole hour. Five answers to one question.
 
 Your starting point matters too. The docs open with it: "By default, layouts and pages are Server Components, which lets you fetch data and render parts of your UI on the server". So the framework's default posture is server-made HTML. Every other pattern is a choice you make on top of that.
 
@@ -496,7 +495,7 @@ const response = await fetch("https://cms.example.com/plans", {
 
 The mechanics are stale-while-revalidate, and the ISR guide spells them out. With a 60 second interval, "After 60 seconds has passed, the next request will still return the cached (now stale) page" and "The cache is invalidated and a new version of the page begins generating in the background". Visitors never wait. Someone just gets slightly old HTML once.
 
-On-demand refresh works through tags. On the caching side, "cacheTag lets you tag cached data so it can be invalidated on-demand." On the invalidation side sits `revalidateTag`, which runs in Server Actions and Route Handlers. In v16 it takes a second argument: "The second argument sets how long stale content can be served while fresh content generates in the background." The docs' sample call, verbatim:
+On-demand refresh works through tags. You tag a fetch with `next: { tags: ["user"] }`. The newer `cacheTag` function does the same job, but it needs the cacheComponents flag from the end of this module. On the invalidation side sits `revalidateTag`, which runs in Server Actions and Route Handlers. In v16 it takes a second argument: "The second argument sets how long stale content can be served while fresh content generates in the background." Here is their own example:
 
 ```tsx
 revalidateTag("user", "max"); // Recommended: stale-while-revalidate
@@ -536,7 +535,7 @@ One gotcha for later. "You cannot change the status code or headers after stream
 
 ### The RSC payload and hydration
 
-So what actually crosses the wire. For Server Components it is not always HTML. The docs: "The RSC Payload is a compact binary representation of the rendered React Server Components tree." The docs list what it contains:
+So what actually crosses the wire. For Server Components it is not always HTML. The docs put it like this. "The RSC Payload is a compact binary representation of the rendered React Server Components tree." The docs list what it contains:
 
 - "The rendered result of Server Components"
 - "Placeholders for where Client Components should be rendered and references to their JavaScript files"
@@ -569,7 +568,7 @@ For the rare value that can never match, React offers `suppressHydrationWarning`
 
 ### Reading the matrix
 
-One table to keep. Read each row as an answer to the module question.
+Here is the table I want you to keep. Read each row as an answer to our one question.
 
 | Pattern      | When HTML is made            | Who waits              | Freshness     |
 | ------------ | ---------------------------- | ---------------------- | ------------- |
@@ -581,32 +580,32 @@ One table to keep. Read each row as an answer to the module question.
 
 ### Where it is heading
 
-This part is the road ahead, not required learning today.
+What follows is the road ahead. You do not need it today.
 
 Next.js 16 ships an opt-in flag: "To enable the cacheComponents flag, set it to true in your next.config.ts file". With it on, "cacheComponents implements Partial Pre-rendering (PPR) as the default behavior in the App Router". The old experimental PPR flags "are no longer necessary and have been removed", so do not go looking for them. Under this model "Data fetching is dynamic by default, and you choose what to cache at the page, component, or function level." The tool for that choice is a directive: "The use cache directive allows you to mark a route, React component, or a function as cacheable." The philosophy guide sums up where this lands: "the boundary between static and dynamic is at the component level, not the route level." Know it exists so the current docs make sense to you.
 
-### Module 4 in the repo (8 minutes)
+### In the repo (8 minutes)
 
 1. Run `pnpm build`. A circle sits beside `/examples/03-static-rendering` in the route list.
 2. Open `src/app/(app)/examples/03-static-rendering/page.tsx`. Add an awaited `headers()` read, borrowed from example `02-server-rendering`. Build again. The circle flips to the function symbol.
 3. Remove the read and build once more. The circle comes back. Static or dynamic follows from what the code reads, not from a setting.
 4. Run `pnpm start`. Visit `/examples/04-revalidation`. Wait thirty seconds and refresh twice. Stale serves first, fresh second. The reason is `export const revalidate = 30` in its `page.tsx`.
-5. Run `pnpm dev` again. Visit `/examples/05-streaming`. Three stages arrive in order. `loading.tsx` holds the route for the first moment, the shell replaces it, and the slow part lands after two seconds. The route file is the cheap boundary, the `Suspense` fallback in `page.tsx` is the precise one.
+5. Run `pnpm dev` again. Visit `/examples/05-streaming`. Three stages arrive in order. `loading.tsx` holds the route for the first moment, the shell replaces it, and the slow part lands after two seconds. The route file is the cheap boundary, the `Suspense` fallback in `page.tsx` is the precise one. This route awaits `connection()`, so the stream also shows in the production build from step 4.
 
 ### Module 4 references
 
-- Server and Client Components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
-- Next.js glossary: <https://nextjs.org/docs/app/glossary>
-- next CLI build output: <https://nextjs.org/docs/app/api-reference/cli/next>
-- Caching without Cache Components: <https://nextjs.org/docs/app/guides/caching-without-cache-components>
-- Incremental Static Regeneration: <https://nextjs.org/docs/app/guides/incremental-static-regeneration>
-- Revalidating: <https://nextjs.org/docs/app/getting-started/revalidating>
-- Streaming: <https://nextjs.org/docs/app/guides/streaming>
-- Migrating to Cache Components: <https://nextjs.org/docs/app/guides/migrating-to-cache-components>
-- cacheComponents config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents>
-- use cache directive: <https://nextjs.org/docs/app/api-reference/directives/use-cache>
-- Rendering philosophy: <https://nextjs.org/docs/app/guides/rendering-philosophy>
-- hydrateRoot: <https://react.dev/reference/react-dom/client/hydrateRoot>
+- T1 Server and Client Components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
+- T1 Next.js glossary: <https://nextjs.org/docs/app/glossary>
+- T1 next CLI build output: <https://nextjs.org/docs/app/api-reference/cli/next>
+- T1 Caching without Cache Components: <https://nextjs.org/docs/app/guides/caching-without-cache-components>
+- T1 Incremental Static Regeneration: <https://nextjs.org/docs/app/guides/incremental-static-regeneration>
+- T1 Revalidating: <https://nextjs.org/docs/app/getting-started/revalidating>
+- T1 Streaming: <https://nextjs.org/docs/app/guides/streaming>
+- T1 Migrating to Cache Components: <https://nextjs.org/docs/app/guides/migrating-to-cache-components>
+- T1 cacheComponents config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents>
+- T1 use cache directive: <https://nextjs.org/docs/app/api-reference/directives/use-cache>
+- T1 Rendering philosophy: <https://nextjs.org/docs/app/guides/rendering-philosophy>
+- T1 hydrateRoot: <https://react.dev/reference/react-dom/client/hydrateRoot>
 
 ## Module 5: Guardrails, errors and not found (25 minutes)
 
@@ -650,7 +649,7 @@ Two details for the SEO minded. Next.js will also "inject a `<meta name="robots"
 
 ### The segment trio
 
-You now hold all three per segment conventions, and they rhyme.
+You now hold all three segment files, and they rhyme.
 
 - `loading.tsx` is the waiting path. "loading.js wraps not-found.js, page.js, and nested layout.js files in a `<Suspense>` boundary."
 - `error.tsx` is the failure path, the same segment wrapped in a React error boundary.
@@ -658,18 +657,18 @@ You now hold all three per segment conventions, and they rhyme.
 
 Module 4 used `loading.tsx` as its cheap streaming fallback. Same file.
 
-### Module 5 in the repo (5 minutes)
+### In the repo (5 minutes)
 
-1. Visit `/examples/11-error-not-found` and click the first link. It reloads the page with `?boom=1`, the render throws, and the boundary UI appears.
-2. Click the Try again button. It calls `unstable_retry()`, which re-fetches and re-renders the segment.
+1. Visit `/examples/11-error-not-found` and click the first link. It re-renders the page with `?boom=1`, the render throws, and the boundary UI appears.
+2. Click the Try again button. It calls `unstable_retry()`, which re-fetches and re-renders the segment. The URL still carries `?boom=1`, so the throw repeats. Remove the query and the page recovers.
 3. Open `src/app/(app)/examples/11-error-not-found/error.tsx`. The `"use client"` line sits on top, the `unstable_retry` prop beside `error`.
 4. Click the second link, `/examples/11-error-not-found/missing`. The `notFound()` call in `missing/page.tsx` throws and `not-found.tsx` renders in its place.
-5. The network tab shows the 404 status. The page source carries the injected noindex meta tag.
+5. Open the network tab. The status is 404. Open the page source. The noindex meta tag is there.
 
 ### Module 5 references
 
-- Error handling: <https://nextjs.org/docs/app/getting-started/error-handling>
-- error.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/error>
-- notFound function: <https://nextjs.org/docs/app/api-reference/functions/not-found>
-- not-found.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/not-found>
-- loading.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/loading>
+- T1 Error handling: <https://nextjs.org/docs/app/getting-started/error-handling>
+- T1 error.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/error>
+- T1 notFound function: <https://nextjs.org/docs/app/api-reference/functions/not-found>
+- T1 not-found.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/not-found>
+- T1 loading.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/loading>
