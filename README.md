@@ -1,4 +1,4 @@
-<!-- REVIEWED - 01 -->
+<!-- REVIEWED - 02 -->
 
 # Introduction to Next.js
 
@@ -672,3 +672,135 @@ Module 4 used `loading.tsx` as its cheap streaming fallback. Same file.
 - T1 notFound function: <https://nextjs.org/docs/app/api-reference/functions/not-found>
 - T1 not-found.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/not-found>
 - T1 loading.js file convention: <https://nextjs.org/docs/app/api-reference/file-conventions/loading>
+
+## Module 6: Mutations with Server Functions (55 minutes)
+
+![The module 6 anchor slide](./slides/slide-07-module-06.png)
+
+### Module 6 goal
+
+By the end of this module you can change data without hand-writing a POST endpoint. You know what a Server Function is, how a form invokes one, how to show pending and errors, and what to call after the write.
+
+### Reads are half the story
+
+Modules 3 to 5 taught you to read. You fetched data, picked rendering patterns, added guardrails. Every route shows data. Real apps write it.
+
+So your SPA instinct asks the right question. Where did my POST endpoint go? It still exists. Next.js now writes it for you. "Behind the scenes, actions use the POST method, and only this HTTP method can invoke them." You write a function. The framework builds the endpoint around it.
+
+### Server Functions and the use server directive
+
+First, the name, because it changed. react.dev dates the rename to September 2024. Before that, everything was a Server Action. Now: "A Server Action is a Server Function used in a specific way (for handling form submissions and mutations). Server Function is the broader term."
+
+The definition is one sentence. "A Server Function is an asynchronous function that runs on the server." The client calls it over the network, so it must be async. You mark one with use client's sibling: "The use server directive designates a function or file to be executed on the server side." Top of an async function body, or top of a whole file.
+
+```ts
+// app/actions.ts
+"use server";
+
+export async function createPost(formData: FormData) {
+  await savePost(formData.get("title"));
+}
+```
+
+The network hop sets the rules. "'use server' can only be used on async functions", and arguments "will need to be serializable". And one more rule. "It's not possible to define Server Functions in Client Components." Define them in a file like this one and import them anywhere.
+
+### Forms without ceremony
+
+You rarely call the function yourself. You hand it to a form. "React extends the HTML form element to allow a Server Function to be invoked with the HTML action prop."
+
+```tsx
+import { createPost } from "@/app/actions";
+
+export default function NewPostPage() {
+  return (
+    <form action={createPost}>
+      <input name="title" />
+      <button>Create</button>
+    </form>
+  );
+}
+```
+
+No onSubmit. No preventDefault. No fetch call. "When invoked in a form, the function automatically receives the FormData object", and you read it with the native FormData methods, like the `formData.get` call above.
+
+The progressive enhancement promise has two halves. Keep them apart.
+
+- Server Component forms work before React arrives: "forms that call Server Actions will be submitted even if JavaScript hasn't loaded yet or is disabled".
+- Client Component forms hold the submit instead: "forms invoking Server Actions will queue submissions if JavaScript isn't loaded yet, and will be prioritized for hydration". Once hydrated, "the browser does not refresh on form submission."
+
+### Pending and errors with useActionState
+
+The form gives no feedback yet. The docs put it plainly. "turn the component that defines the form into a Client Component and use React useActionState."
+
+```tsx
+"use client";
+
+import { useActionState } from "react";
+import { createPost } from "@/app/actions";
+
+export function NewPostForm() {
+  const [state, formAction, pending] = useActionState(createPost, null);
+  return (
+    <form action={formAction}>
+      <input name="title" />
+      <button disabled={pending}>Create</button>
+      <p aria-live="polite">{state?.message}</p>
+    </form>
+  );
+}
+```
+
+The Next.js guides name the triple `[state, formAction, pending]`. The react.dev reference names the exact same triple `[state, dispatchAction, isPending]`. Same hook, same order, new labels.
+
+`state` holds whatever the action returned last, so return messages and field errors as plain objects. `pending` is "a pending boolean that can be used to show a loading indicator or disable the submit button".
+
+One catch. "When using useActionState, the Server function signature will change to receive a new prevState or initialState parameter as its first argument." Form data moves second: `createPost(prevState, formData)`.
+
+For child components there is `useFormStatus` from react-dom. It "gives you status information of the last form submission", with its own pending flag. Its rule is strict. It "must be called from a component that is rendered inside a form", never one rendered in the same component. So their example puts a separate SubmitButton inside the form.
+
+### After the write
+
+Your write landed. The pages showing that data do not know yet. Four tools close the gap, all inside the action, and one response can carry "both the updated UI and new data in a single server roundtrip".
+
+`refresh()` covers the current view. "refresh allows you to refresh the client router from within a Server Action." Use it when the view depends on state outside the cache. It "does not revalidate tagged data."
+
+`revalidatePath` aims at one route. It lets you "invalidate cached data on-demand for a specific path". Use it when one route is affected and tagging is overkill.
+
+`revalidateTag` refreshes every read behind a tag. In v16 it takes a second argument, since "The single-argument form revalidateTag(tag) is deprecated". The profile 'max' means stale-while-revalidate: "Users receive stale content while fresh data loads in the background." Fine for blogs and catalogs. It "intentionally skips that immediate re-render".
+
+`updateTag` is for read-your-own-writes, when users must see their own change now. It "immediately expires the cached data for the specified tag", and the next request waits for fresh data instead of stale. Its scope: "updateTag can only be called from within Server Actions."
+
+To move the user afterward, call `redirect`. It throws: "Invoking the redirect() function throws a NEXT_REDIRECT error", so it "should be called outside the try block when using try/catch statements". And "Any code after it won't execute", so revalidate first, redirect last. The docs' example calls revalidatePath('/posts'), then redirect('/posts').
+
+### The security model in five points
+
+1. Actions answer POST, and "only this HTTP method can invoke them".
+2. "The request's Origin is compared to the Host (or X-Forwarded-Host). Mismatches are rejected."
+3. "Action requests are capped at 1MB by default."
+4. Clients reference actions by "encrypted, non-deterministic IDs".
+5. None of that checks who is calling. "Always verify authentication and authorization inside every Server Function", and validate every argument, because arguments "are fully client-controlled".
+
+### In the repo (8 minutes)
+
+1. Visit `/examples/12-mutations` and submit an item. No route handler and no fetch call exist anywhere on this page.
+2. Submit the empty form once. An error line appears under the form. The failure came back as a return value, not a throw.
+3. Open `src/app/(app)/examples/12-mutations/item-form.tsx`. The `[state, formAction, pending]` triple and the disabled button carry the client half.
+4. Open `src/app/(app)/examples/12-mutations/actions.ts`. `"use server"` sits on top, the `prevState` first argument follows, and the `revalidatePath("/examples/12-mutations")` call lands after the write.
+5. Open `src/app/(app)/examples/12-mutations/store.ts`. The list lives in a module-level array. Restart the dev server, reload, the list is empty. Module 9 starts right there.
+
+### Module 6 references
+
+- T1 Mutating data: <https://nextjs.org/docs/app/getting-started/mutating-data>
+- T1 use server: <https://nextjs.org/docs/app/api-reference/directives/use-server>
+- T1 Server Functions: <https://react.dev/reference/rsc/server-functions>
+- T1 use server on react.dev: <https://react.dev/reference/rsc/use-server>
+- T1 useActionState: <https://react.dev/reference/react/useActionState>
+- T1 useFormStatus: <https://react.dev/reference/react-dom/hooks/useFormStatus>
+- T1 Forms guide: <https://nextjs.org/docs/app/guides/forms>
+- T1 Server Actions guide: <https://nextjs.org/docs/app/guides/server-actions>
+- T1 Data security guide: <https://nextjs.org/docs/app/guides/data-security>
+- T1 revalidatePath: <https://nextjs.org/docs/app/api-reference/functions/revalidatePath>
+- T1 revalidateTag: <https://nextjs.org/docs/app/api-reference/functions/revalidateTag>
+- T1 updateTag: <https://nextjs.org/docs/app/api-reference/functions/updateTag>
+- T1 refresh: <https://nextjs.org/docs/app/api-reference/functions/refresh>
+- T1 redirect: <https://nextjs.org/docs/app/api-reference/functions/redirect>
