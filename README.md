@@ -1,4 +1,4 @@
-<!-- REVIEWED - 07 -->
+<!-- REVIEWED - 08 -->
 
 # Introduction to Next.js
 
@@ -393,7 +393,7 @@ You are learning this on Next.js 16, released in October 2025. Turbopack "has re
 
 ## Module 4: Rendering patterns (65 minutes)
 
-![The module 4 anchor slide](./slides/slide-05-module-04.png)
+![The module 4 anchor slide](./slides/pcx-next-js-workshop-slide-05-module-04@2x.png)
 
 ### Module 4 goal
 
@@ -609,7 +609,7 @@ Next.js 16 ships an opt-in flag: "To enable the cacheComponents flag, set it to 
 
 ## Module 5: Guardrails, errors and not found (25 minutes)
 
-![The module 5 anchor slide](./slides/slide-06-module-05.png)
+![The module 5 anchor slide](./slides/pcx-next-js-workshop-slide-06-module-05@2x.png)
 
 ### Module 5 goal
 
@@ -675,7 +675,7 @@ Module 4 used `loading.tsx` as its cheap streaming fallback. Same file.
 
 ## Module 6: Mutations with Server Functions (55 minutes)
 
-![The module 6 anchor slide](./slides/slide-07-module-06.png)
+![The module 6 anchor slide](./slides/pcx-next-js-workshop-slide-07-module-06@2x.png)
 
 ### Module 6 goal
 
