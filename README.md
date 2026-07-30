@@ -1,4 +1,4 @@
-<!-- REVIEWED - 04 -->
+<!-- REVIEWED - 05 -->
 
 # Introduction to Next.js
 
@@ -37,7 +37,7 @@ That is 415 minutes of content. We run it in two hour sessions, with a short bre
 
 ## Module 1: Welcome and framing (20 minutes)
 
-![The module 1 anchor slide](./slides/slide-02-module-01.png)
+![The module 1 anchor slide](./slides/pcx-next-js-workshop-slide-02-module-01@2x.png)
 
 ### Module 1 goal
 
