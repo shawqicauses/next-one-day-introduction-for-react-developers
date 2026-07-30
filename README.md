@@ -1,4 +1,4 @@
-<!-- REVIEWED - 05 -->
+<!-- REVIEWED - 06 -->
 
 # Introduction to Next.js
 
@@ -186,7 +186,7 @@ The support table on that page marks the Node.js server and the Docker container
 
 ## Module 3: From React to Next.js, the mental model (55 minutes)
 
-![The module 3 anchor slide](./slides/slide-04-module-03.png)
+![The module 3 anchor slide](./slides/pcx-next-js-workshop-slide-04-module-03@2x.png)
 
 ### Module 3 goal
 
