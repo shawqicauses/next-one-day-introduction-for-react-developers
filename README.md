@@ -1,8 +1,8 @@
-<!-- REVIEWED - 03 -->
+<!-- REVIEWED - 04 -->
 
 # Introduction to Next.js
 
-![The workshop introduction slide](./slides/slide-01-intro.png)
+![The workshop introduction slide](./slides/pcx-next-js-workshop-slide-01-intro@2x.png)
 
 Welcome. My name is Shawqi Hatem, and this is a full workshop on Next.js. I built it for you. You know React. You have not moved to Next.js yet, or you moved and you still feel unsure about what runs where. My goal is simple. Remove the fear of moving from React to Next.js by building the right mental model, not by covering everything.
 
