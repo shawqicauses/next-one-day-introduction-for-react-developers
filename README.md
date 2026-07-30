@@ -1,4 +1,4 @@
-<!-- REVIEWED - 06 -->
+<!-- REVIEWED - 07 -->
 
 # Introduction to Next.js
 
@@ -106,7 +106,7 @@ We close with where to go for all four.
 
 ## Module 2: Why Next.js and the myths (25 minutes)
 
-![The module 2 anchor slide](./slides/slide-03-module-02.png)
+![The module 2 anchor slide](./slides/pcx-next-js-workshop-slide-03-module-02@2x.png)
 
 ### Module 2 goal
 
