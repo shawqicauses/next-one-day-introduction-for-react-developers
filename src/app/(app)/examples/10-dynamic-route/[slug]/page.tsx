@@ -1,6 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
+
+export const generateStaticParams = function generateStaticParams() {
+  return [{ slug: "next-js" }];
+};
 
 // DYNAMIC SEGMENT PAGE.
 // This one file serves /examples/10-dynamic-route/anything. The
@@ -16,20 +20,29 @@ const titles: Record<string, string> = {
 
 const SlugPage = async function SlugPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { slug } = await params;
-  const title = titles[slug];
+  const paramsObject = await params;
+  const searchParamsObject = await searchParams;
+  const title = titles[paramsObject.slug];
 
   // notFound() throws and stops rendering here. Next.js sends the
   // missing path into the 404 flow and responds with status 404.
-  if (!title) notFound();
+
+  if (!title) {
+    // redirect("/examples");
+    notFound();
+  }
+
+  console.log(paramsObject, searchParamsObject);
 
   return (
     <main>
       <h2 className="mb-5 text-lg font-semibold leading-none">
-        10 Dynamic route: {slug}
+        10 Dynamic route: {paramsObject.slug}
       </h2>
       <p className="mb-2 text-sm">{title}</p>
       <p className="text-sm text-gray-500">

@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Link from "next/link";
 
@@ -40,5 +40,8 @@ const DynamicRoutePage = function DynamicRoutePage() {
     </main>
   );
 };
+
+// /a -> /s (replace) -> /h: browser's history would be: a -> h
+// /a -> /s (push) -> /h: browser's history would be: a -> s -> h
 
 export default DynamicRoutePage;
