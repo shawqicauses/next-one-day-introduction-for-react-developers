@@ -1,4 +1,4 @@
-<!-- REVIEWED - 12 -->
+<!-- REVIEWED - 13 -->
 
 # Introduction to Next.js
 
@@ -1103,3 +1103,39 @@ Module 4 already named where this goes. The cacheComponents flag, Partial Pre-re
 - T1 cacheComponents config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents>
 - T1 React, creating a React app: <https://react.dev/learn/creating-a-react-app>
 - Repo versions and routes: this repo, `package.json` and `src/app/(app)/examples`.
+
+## Module 11: What comes next (20 minutes)
+
+![The module 11 anchor slide](./slides/pcx-next-js-workshop-slide-12-module-11@2x.png)
+
+### What we skipped on purpose
+
+- Authentication and authorization. Sessions and tokens need a day.
+- Testing. Your React testing habits carry over, the setups need time.
+- Deployment pipelines and CI. Previews and rollbacks are platform work.
+- Deep caching with cacheComponents. You saw the defaults, not the model.
+
+Mutations, metadata, images, fonts, environment variables, errors, state, and migration are all inside the workshop. We covered every one.
+
+### Next steps
+
+- Read the official docs, starting at <https://nextjs.org/docs>. Their frame: "You use React Components to build user interfaces, and Next.js for additional features and optimizations".
+- Refresh fundamentals at <https://react.dev/learn>.
+- For what changed this cycle, read <https://nextjs.org/blog/next-16> and <https://react.dev/blog/2025/10/01/react-19-2>.
+- When you port your app, use the three migration guides from Module 10, from Vite, from Create React App, and from the Pages Router.
+
+### The one-sentence summary
+
+Next.js is React with the server questions answered, and your React knowledge came with you.
+
+That is the workshop. Thank you for spending it with me.
+
+### Module 11 references
+
+- T1 Next.js docs home: <https://nextjs.org/docs>
+- T1 React learn: <https://react.dev/learn>
+- T1 Next.js 16 release post: <https://nextjs.org/blog/next-16>
+- T1 React 19.2 release post: <https://react.dev/blog/2025/10/01/react-19-2>
+- T1 The three migration guides, listed in the Module 10 references.
+
+![The closing slide](./slides/pcx-next-js-workshop-slide-13-closing@2x.png)
