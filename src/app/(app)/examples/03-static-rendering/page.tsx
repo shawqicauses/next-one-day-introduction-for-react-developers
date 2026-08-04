@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 // STATIC RENDERING.
 // This page reads no request data, so Next.js pre-renders it at
@@ -6,14 +6,14 @@
 // time does not change. In the build output this route carries the
 // static symbol.
 
-// This const is evaluated once, when the page is pre-rendered. It is
-// a build-time timestamp, not a request-time one.
-const wasBuiltAt = Intl.DateTimeFormat("en-ZA", {
-  dateStyle: "medium",
-  timeStyle: "medium",
-}).format(new Date());
-
 const StaticRenderingPage = async function StaticRenderingPage() {
+  // This const is evaluated once, when the page is pre-rendered. It is
+  // a build-time timestamp, not a request-time one.
+  const wasBuiltAt = Intl.DateTimeFormat("en-ZA", {
+    dateStyle: "medium",
+    timeStyle: "medium",
+  }).format(new Date());
+
   return (
     <main>
       <h2 className="mb-5 text-lg font-semibold leading-none">
