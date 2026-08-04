@@ -1,4 +1,4 @@
-<!-- REVIEWED - 09 -->
+<!-- REVIEWED - 10 -->
 
 # Introduction to Next.js
 
@@ -481,7 +481,7 @@ The CLI page's sample output shows both symbols in one list, with routes like `â
 
 ### Revalidation
 
-The middle ground. Static HTML that refreshes. The ISR guide promises you can "Update static content without rebuilding the entire site". The glossary adds that in Next.js ISR is also known as revalidation.
+The middle ground. Static HTML that refreshes. The ISR guide promises you can "Update static content without rebuilding the entire website". The glossary adds that in Next.js ISR is also known as revalidation.
 
 First, the v16 truth. Old tutorials will tell you Next.js caches every fetch. That is gone. The current guide opens with: "By default, fetch requests are not cached." Caching is something you opt into: "You can cache individual requests by setting the cache option to 'force-cache'." If you learned Next 13 or 14, unlearn cached-by-default fetch today.
 
@@ -531,7 +531,7 @@ export default function PageDashboard() {
 
 What arrives first is the shell. "Everything that renders before any async work resolves is called the static shell". It "is sent immediately, giving the user something to see and interact with while dynamic content streams in." Header, navigation, and layout land at once. The slow chart streams in when its data resolves.
 
-One gotcha for later. "You cannot change the status code or headers after streaming starts." A `notFound()` thrown mid-stream cannot become a real 404. Next.js injects a noindex meta tag instead.
+One gotcha for later. "You can't change the status code or headers after streaming starts." A `notFound()` thrown mid-stream can't become a real 404. Next.js injects a noindex meta tag instead.
 
 ### The RSC payload and hydration
 
@@ -856,7 +856,7 @@ Filters, search text, pagination, sort order. In a SPA these live in `useState` 
 
 On the server, when data depends on search params, "it's often a better option to read the `searchParams` prop of the corresponding Page". On the client, "useSearchParams is a Client Component hook that lets you read the current URL's query string", and it is "not supported in Server Components to prevent stale values during partial rendering". To write, "You can use `useRouter` or `Link` to set new `searchParams`." The docs' sort example pushes `?sort=asc` and the page receives the updated prop.
 
-The deeper framing lives in the official Learn course, not in the docs section. Same site, same authority. The course says "you'll be using URL search params to manage the search state" and lists the wins: "users can bookmark the current state of the application, including their search queries and filters", and URL parameters "can be directly consumed on the server to render the initial state".
+The deeper framing lives in the official Learn course, not in the docs section. Same website, same authority. The course says "you'll be using URL search params to manage the search state" and lists the wins: "users can bookmark the current state of the application, including their search queries and filters", and URL parameters "can be directly consumed on the server to render the initial state".
 
 ### In the repo (5 minutes)
 
@@ -872,3 +872,78 @@ The deeper framing lives in the official Learn course, not in the docs section. 
 - T1 createContext error page: <https://nextjs.org/docs/messages/context-in-server-component>
 - T1 useSearchParams: <https://nextjs.org/docs/app/api-reference/functions/use-search-params>
 - T1 Learn, search and pagination: <https://nextjs.org/learn/dashboard-app/adding-search-and-pagination>
+
+## Module 8: Polish, metadata to env (35 minutes)
+
+![The module 8 anchor slide](./slides/slide-09-module-08.png)
+
+### Module 8 goal
+
+By the end of this module your pages look finished from the outside. The right tab title, real link preview tags, images that do not jump, fonts that do not phone home, and secrets that stay on the server.
+
+### Metadata without a head tag
+
+Your SPA had one `index.html` and you edited its head by hand. Module 3 replaced that file with the root layout, so titles moved into an export. You "export a Metadata object from a static layout.js or page.js file", and Next.js will "automatically generate the relevant `<head>` tags for your page".
+
+In the root layout, give the title two parts, like `{ template: '%s | PCX Agency', default: 'PCX Agency' }`. "title.template can be used to add a prefix or a suffix to titles defined in child route segments." A page titled About renders as About | PCX Agency, and "title.default is required" beside a template.
+
+When a value depends on data, you "use generateMetadata function to fetch metadata that depends on data", awaiting `params` and returning the same shape. You can't export both forms from one segment, and both are "only supported in Server Components". Merging is shallow. Nested fields like openGraph "defined in an earlier segment are overwritten by the last segment", replaced whole, never deep merged.
+
+You met this API in module 2. Myth one leaned on the docs line that it exists "for improved SEO and web shareability". One topic of 18.
+
+### next/image, the free wins
+
+The docs introduce `<Image>` as an extended `<img>`, and three of the listed wins carry the value.
+
+- Size: "Automatically serving correctly sized images for each device, using modern image formats like WebP."
+- Stability: "Preventing layout shift automatically when images are loading."
+- Speed: "Only loading images when they enter the viewport using native browser lazy loading, with optional blur-up placeholders."
+
+Where the file lives decides your work. Import a local file and you are done. "If the image is statically imported, Next.js will automatically determine the intrinsic width and height." Nothing jumps.
+
+```tsx
+import Image from "next/image";
+import hero from "./hero.png";
+
+export default function Page() {
+  return <Image src={hero} alt="The launch hero" />;
+}
+```
+
+Remote images need two things. Next.js can't measure files it does not have at build time, so "you'll need to provide the width, height and optional blurDataURL props manually". When fixed numbers do not fit, "you can use the fill property to make the image fill the size of the parent element." And the host goes on an allowlist: "you need to define a list of supported URL patterns in next.config.js."
+
+### next/font, fonts without the flash
+
+One import solves fonts. "The next/font module automatically optimizes your fonts and removes external network requests for improved privacy and performance." It brings "built-in self-hosting for any font file", loading web fonts "with no layout shift."
+
+The privacy line deserves its exact words. Google Fonts become static assets served from your own domain, and "no requests are sent to Google by the browser when the user visits your website."
+
+Usage is three moves. Import from `next/font/google` or `next/font/local`, "call it as a function with the appropriate options, and set the className of the element you want to apply the font to". The docs example is `Geist({ subsets: ['latin'] })` with its className on the `html` element. Fonts are scoped to the component they are used in, so the root layout covers the whole app. For a brand font, `localFont` takes a `src` path and does the same job.
+
+### Environment variables and the wall
+
+Next.js loads "environment variables from .env\* files into process.env" on its own. What matters is the wall between the server and the browser.
+
+By default every variable stays behind it. Non prefixed variables "are only available in the Node.js environment, meaning they aren't accessible to the browser". That is Module 2's secret keeping, explained.
+
+You cross the wall with the `NEXT_PUBLIC_` prefix. Know what it does. Next.js inline(s) the value "at build time, into the js bundle that is delivered to the client". Inlined means frozen. "After being built, your app will no longer respond to changes to these environment variables." Two consequences follow.
+
+- Dynamic reads skip the magic. "Note that dynamic look ups will not be inlined". A `process.env[varName]` look up is not replaced.
+- The server stays flexible. You can "safely read environment variables on the server during dynamic rendering" by awaiting `connection()` from `next/server`, reading fresh values per request.
+
+Precedence in one line, since one name can come from four files plus `process.env`. The order is `process.env`, then `.env.$(NODE_ENV).local`, then `.env.local`, then `.env.$(NODE_ENV)`, then `.env`, "stopping once the variable is found."
+
+### In the repo (5 minutes)
+
+1. Visit `/examples/13-metadata`. The browser tab reads 13 Metadata.
+2. View the page source and search for `og:`. The `og:title` and `og:description` meta tags sit in the head. Open `src/app/(app)/examples/13-metadata/page.tsx`. The `generateMetadata` export produced them.
+3. Visit `/examples/14-image-font` with the network tab open. Open `src/app/(app)/examples/14-image-font/page.tsx`. The static import needs no size props while the URL image writes them by hand.
+4. Filter the network tab by font. Every request hits your own domain. The `RobotoMono` call sits in the same file. Not one request goes to Google.
+
+### Module 8 references
+
+- T1 Metadata and OG images: <https://nextjs.org/docs/app/getting-started/metadata-and-og-images>
+- T1 generateMetadata: <https://nextjs.org/docs/app/api-reference/functions/generate-metadata>
+- T1 Image optimization: <https://nextjs.org/docs/app/getting-started/images>
+- T1 Font optimization: <https://nextjs.org/docs/app/getting-started/fonts>
+- T1 Environment variables: <https://nextjs.org/docs/app/guides/environment-variables>
