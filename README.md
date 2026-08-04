@@ -1,4 +1,4 @@
-<!-- REVIEWED - 11 -->
+<!-- REVIEWED - 12 -->
 
 # Introduction to Next.js
 
@@ -1033,3 +1033,73 @@ Next.js has two server runtimes. The Node.js runtime is the default and "has acc
 - T1 Next.js output config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/output>
 - T1 Next.js Edge Runtime: <https://nextjs.org/docs/app/api-reference/edge>
 - T1 Next.js proxy file: <https://nextjs.org/docs/app/api-reference/file-conventions/proxy>
+
+## Module 10: Hands-on recap (45 minutes)
+
+![The module 10 anchor slide](./slides/pcx-next-js-workshop-slide-11-module-10@2x.png)
+
+### Module 10 goal
+
+By the end of this module you have walked the routes we built, read the build output, and proved the whole model with your own hands.
+
+### The examples map
+
+Everything lives in one examples area at `src/app/(app)/examples`, one route per concept. The plain Node server from Module 9 sits at the repo root.
+
+| Route                                | What it shows                          | Module |
+| ------------------------------------ | -------------------------------------- | ------ |
+| `examples/01-client-rendering`       | A use client page fetching in effect   | 4      |
+| `examples/02-server-rendering`       | A page rendered per request            | 4      |
+| `examples/03-static-rendering`       | A page pre-rendered at build time      | 4      |
+| `examples/04-revalidation`           | Static content that refreshes itself   | 4      |
+| `examples/05-streaming`              | Suspense boundaries streaming in       | 4      |
+| `examples/06-server-client-boundary` | Server tree ends, island begins        | 3      |
+| `examples/07-route-handler`          | A route file returning plain JSON      | 9      |
+| `examples/08-server-function`        | A server function called from the UI   | 6      |
+| `examples/09-data-fetching`          | An async page awaiting its data        | 3      |
+| `examples/10-dynamic-route`          | A slug folder serving many URLs        | 3      |
+| `examples/11-error-not-found`        | Error and not-found files at work      | 5      |
+| `examples/12-mutations`              | A form writing data, then revalidating | 6      |
+| `examples/13-metadata`               | Titles and descriptions from code      | 8      |
+| `examples/14-image-font`             | next/image and next/font applied       | 8      |
+| `examples/15-providers`              | A theme provider in a server layout    | 7      |
+| `traditional-server/server.mjs`      | A plain Node http server, always on    | 9      |
+
+### Reading the build output
+
+Run `pnpm build`. The repo runs Next.js 16.2.12 with React 19.2.8. Under the route table the CLI prints its two-line legend:
+
+- "○ (Static) pre-rendered as static content"
+- "ƒ (Dynamic) server-rendered on demand"
+
+We visited most of these routes in earlier modules, so read the table as a recap. `02-server-rendering` shows the function symbol, `03-static-rendering` the circle, and `04-revalidation` the circle plus a Revalidate column reading 30s, the thirty seconds from Module 4. Static or dynamic follows from what each route reads, not from a setting.
+
+### Guided recap: break it, then fix it (25 minutes)
+
+No new code. Five stations, five minutes each, all inside the examples you already know. At each one, predict first, then look.
+
+1. Prove the model. View source on `01-client-rendering`, the time is absent. View source on `09-data-fetching`, the list is in the HTML. Say why in one sentence.
+2. Flip a route. Paste the awaited `headers()` read from `02-server-rendering` into `03-static-rendering` and run `pnpm build`. The circle becomes the function symbol. Revert and build again, the circle returns.
+3. Break the boundary. Delete the `"use client"` line in `06-server-client-boundary/counter.tsx` and read the error. It names the rule from Module 3. Restore the line.
+4. Break the refresh. Comment out the `revalidatePath` line in `12-mutations/actions.ts`. Submit an item, the list does not move. Refresh by hand, the item appears. Restore the line. The write worked, the read was stale.
+5. Guardrails on purpose. With the network tab open, visit `/examples/11-error-not-found/missing`, confirm the 404 status and the noindex tag. Then trigger the error link, click Try again, watch it throw again because `?boom=1` is still in the URL, remove the query, recover.
+
+If we have time left, open `/examples/07-route-handler` and `/api/time` side by side. Two route files returning JSON, one of them slow on purpose.
+
+### When you port a real app
+
+The Vite migration guide states the strategy in one sentence: "get a working Next.js application as quickly as possible, so that you can then adopt Next.js features incrementally". Keep it running, then upgrade piece by piece. The CRA guide names the halfway state: "You aren't yet leveraging Next.js features like server-side rendering or file-based routing, but you can now do so incrementally". React's docs agree: "you can opt-in to using server features on individual routes without rewriting your app". Three guides carry a real migration, from Vite, from Create React App, and for Pages Router teams the pages-to-app guide, where `app` works "simultaneously with the `pages` directory to allow for incremental page-by-page migration".
+
+### The road ahead
+
+Module 4 already named where this goes. The cacheComponents flag, Partial Pre-rendering as the default, and caching choices moving to the `use cache` directive. You do not need any of it yet. The references below are where to continue when you do.
+
+### Module 10 references
+
+- T1 next CLI build output: <https://nextjs.org/docs/app/api-reference/cli/next>
+- T1 Migrating from Vite: <https://nextjs.org/docs/app/guides/migrating/from-vite>
+- T1 Migrating from Create React App: <https://nextjs.org/docs/app/guides/migrating/from-create-react-app>
+- T1 Pages to App Router: <https://nextjs.org/docs/app/guides/migrating/app-router-migration>
+- T1 cacheComponents config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents>
+- T1 React, creating a React app: <https://react.dev/learn/creating-a-react-app>
+- Repo versions and routes: this repo, `package.json` and `src/app/(app)/examples`.
