@@ -1,4 +1,4 @@
-<!-- REVIEWED - 10 -->
+<!-- REVIEWED - 11 -->
 
 # Introduction to Next.js
 
@@ -875,7 +875,7 @@ The deeper framing lives in the official Learn course, not in the docs section. 
 
 ## Module 8: Polish, metadata to env (35 minutes)
 
-![The module 8 anchor slide](./slides/slide-09-module-08.png)
+![The module 8 anchor slide](./slides/pcx-next-js-workshop-slide-09-module-08@2x.png)
 
 ### Module 8 goal
 
@@ -947,3 +947,89 @@ Precedence in one line, since one name can come from four files plus `process.en
 - T1 Image optimization: <https://nextjs.org/docs/app/getting-started/images>
 - T1 Font optimization: <https://nextjs.org/docs/app/getting-started/fonts>
 - T1 Environment variables: <https://nextjs.org/docs/app/guides/environment-variables>
+
+## Module 9: Traditional servers and serverless (40 minutes)
+
+![The module 9 anchor slide](./slides/pcx-next-js-workshop-slide-10-module-09@2x.png)
+
+### Module 9 goal
+
+By the end of this module you can explain where server code runs. We kill some state first, then we name what happened. You know how a long-running server differs from a serverless function, why that changes how you write code, and the four official ways Next.js deploys.
+
+### Watch state die
+
+Before any theory, run the difference. The repo carries a plain Node server at `traditional-server/server.mjs`, outside the Next.js app on purpose.
+
+1. Start it with `node traditional-server/server.mjs`. One process starts, binds port 4000, and stays there.
+2. Hit it twice with `curl http://localhost:4000`. The response carries a `requestCount`. It reads 1, then 2. One process, one memory, the count climbs.
+3. Stop it with Ctrl C and start it again. cURL once more. The count is back to 1. The state lived in the process, and the process is gone.
+4. Now the same lesson inside Next.js. Open the `/examples/12-mutations` form from Module 6 and submit it twice. Two new entries render under the form.
+5. Restart the dev server and reload the page. The entries are gone. The list is back to where it started.
+
+Hold on to what you just saw. A long-running server keeps memory between requests until something kills the process. A serverless platform kills and clones your process as a matter of routine. The rest of this module names both models and what they demand from your code.
+
+### The traditional server
+
+You just watched this model work. Now we name it. MDN describes a web server plainly: "Web servers wait for client request messages, process them when they arrive, and reply to the web browser with an HTTP response message". One process starts, takes a port, and stays alive. In Node.js terms, "A Node.js app runs in a single process, without creating a new thread for every request". That is `server.mjs`. It is also the model Express taught everyone.
+
+Because it is all one process, anything in module scope stays in memory from one request to the next. That is why `requestCount` climbed. The cost model follows the uptime. Vercel's compute page says it flatly: "You will be responsible for provisioning, and pay for the entire duration of the server's uptime". You get persistence and control. You pay for uptime and you manage the machine and the scaling.
+
+### Serverless functions
+
+Serverless flips the model you just killed with Ctrl C. The definition, from Vercel: "Serverless is a cloud computing model that allows you to build and run applications and services without having to manage your own servers." Kill one myth right away, from the same page: "Despite the name, servers are still used". Someone else manages them.
+
+Execution is per request. When a request arrives, "a computing instance on a server is spun up to handle the request, and then spun down after the request is complete". AWS Lambda is the canonical example, and Vercel Functions work the same way. Scaling is automatic in both directions, including down to zero when nothing arrives. Billing follows use instead of uptime.
+
+The convenience has one price: cold starts. "When adding additional capacity to a serverless application there is a short period of initialization time that happens as the first request is received". A reused instance skips that setup, and the docs call it warm. You can't fully remove the effect. A current note: since April 2025 new Vercel projects default to Fluid Compute, a hybrid that softens cold starts with instance sharing and pre-warming. The two poles you just learned are still the mental model.
+
+### State is the difference
+
+You watched the count die. Here is the rule behind it. The Lambda guide says invocations run independently. Warm reuse exists, but "state may not persist across invocations". In the demo the Node process promised persistence until you killed it. Serverless never makes the promise at all. So the rule is simple. Use memory as a cache, never as the store.
+
+Next.js says the same about its own request layer. The proxy docs warn that "you should not attempt relying on shared modules or globals". Pass data through headers, cookies, redirects, or the URL instead. The default Next.js cache has the same shape, in memory and per instance, so on serverless platforms it is short-lived.
+
+Databases feel this hardest. Every instance is its own client, "often leading to connection limits being hit". The fix is pooling: "Rather than opening a connection with every request, connection pooling allows us to designate a single 'pooler' that keeps an active connection to the database". Requests reuse that one connection instead of opening their own.
+
+In Module 2 I promised you do not need Vercel. Here is the proof.
+
+### Where Next.js runs
+
+Now place Next.js on this map. The deploying guide opens with the full list: "Next.js can be deployed as a Node.js server, Docker container, static export, or adapted to run on different platforms." Four targets.
+
+First, the Node.js server. You "run npm run build to build your application and npm run start to start the Node.js server". Then comes the sentence I want you to remember: "This server supports all Next.js features". next start is a real long-running server, the kind from the top of this module. On SIGINT or SIGTERM it "will finish in-flight requests and execute any pending after() callbacks before exiting", and the docs recommend nginx in front of it like any Node service. Said plainly, Next.js is your back-end when you want it to be.
+
+Second, Docker. "Next.js can be deployed to any provider that supports Docker containers" and "Docker deployments support all Next.js features". For a lean image, output standalone "copies only the necessary files for a production deployment" plus a "minimal server.js file" run in place of next start.
+
+Third, static export. Set output export in next.config.js and the build emits plain files for any static host. The old next export command "has been removed" in favor of this option. The tradeoff: "Running as a static export does not support Next.js features that require a server". The unsupported list names Cookies, Headers, redirects, rewrites, Proxy, Incremental Static Regeneration, Server Actions, Draft Mode, Intercepting Routes, default Image Optimization, and dynamic routes without generateStaticParams.
+
+Fourth, adapters. "Next.js can be adapted to run on different platforms to support their infrastructure capabilities". Vercel and Bun ship verified adapters today. Cloudflare and Netlify are building theirs on the same API.
+
+The docs frame the targets as a ramp, not a fork: "Next.js enables starting as a static site or Single-Page Application (SPA), then later optionally upgrading to use features that require a server".
+
+### Edge in brief
+
+Next.js has two server runtimes. The Node.js runtime is the default and "has access to all Node.js APIs". The Edge Runtime is a restricted subset: "The Edge Runtime does not support all Node.js APIs", with no filesystem access and no ISR. In v16 the middleware file "has been renamed to proxy" and "Proxy defaults to using the Node.js runtime". Fair warning. Some docs pages still call proxy an Edge feature. The docs are mid-transition here. Trust the proxy reference page.
+
+### What this means for your code
+
+- Do not park state in module scope. It can vanish between invocations.
+- Treat in-memory data as a cache, never as the source of truth.
+- Pool your database connections. Per-instance connections hit limits fast.
+- Know which target you deploy to before you rely on a feature. Node server and Docker support everything. Static export and some adapters do not.
+- In a proxy file, pass data through headers, cookies, or the URL. Never through globals.
+
+### Module 9 references
+
+- T2 MDN server-side first steps: <https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Introduction>
+- T1 Node.js introduction: <https://nodejs.org/en/learn/getting-started/introduction-to-nodejs>
+- T3 Vercel compute fundamentals: <https://vercel.com/docs/fundamentals/what-is-compute>
+- T3 AWS Lambda developer guide: <https://docs.aws.amazon.com/lambda/latest/dg/welcome.html>
+- T3 Vercel Functions: <https://vercel.com/docs/functions>
+- T3 Vercel Fluid Compute: <https://vercel.com/docs/fluid-compute>
+- T3 Vercel connection pooling guide: <https://vercel.com/guides/connection-pooling-with-serverless-functions>
+- T1 Next.js deploying: <https://nextjs.org/docs/app/getting-started/deploying>
+- T1 Next.js static exports: <https://nextjs.org/docs/app/guides/static-exports>
+- T1 Next.js self-hosting: <https://nextjs.org/docs/app/guides/self-hosting>
+- T1 Next.js output config: <https://nextjs.org/docs/app/api-reference/config/next-config-js/output>
+- T1 Next.js Edge Runtime: <https://nextjs.org/docs/app/api-reference/edge>
+- T1 Next.js proxy file: <https://nextjs.org/docs/app/api-reference/file-conventions/proxy>
