@@ -1,4 +1,4 @@
-<!-- REVIEWED - 08 -->
+<!-- REVIEWED - 09 -->
 
 # Introduction to Next.js
 
@@ -804,3 +804,71 @@ To move the user afterward, call `redirect`. It throws: "Invoking the redirect()
 - T1 updateTag: <https://nextjs.org/docs/app/api-reference/functions/updateTag>
 - T1 refresh: <https://nextjs.org/docs/app/api-reference/functions/refresh>
 - T1 redirect: <https://nextjs.org/docs/app/api-reference/functions/redirect>
+
+## Module 7: State and providers (30 minutes)
+
+![The module 7 anchor slide](./slides/pcx-next-js-workshop-slide-08-module-07@2x.png)
+
+### Module 7 goal
+
+By the end of this module you know where state lives now. Client Components hold it. A provider shares it. The URL carries the shareable part. Your `useState` code did not change jobs.
+
+### State stays on the client
+
+Module 3 drew the boundary. Now I answer the question it left open. Where did your state go? Nowhere. The docs' when-to-use list opens with it: use Client Components when you need "State and event handlers. E.g. `onClick`, `onChange`". The list continues with life-cycle logic like `useEffect`, browser-only APIs, and custom hooks.
+
+Server Components render and finish. No instance waits on the server for a click. So state sits where it always did, in components running in the browser. Your reducers, your toggles, your form state, all unchanged.
+
+### The provider pattern
+
+Global state in React means context, and context has one hard rule. The docs set it up: "React context is commonly used to share global state like the current theme." Then: "However, React context is not supported in Server Components." Call `createContext` in a Server Component and a dedicated error page stops you: "You are using `createContext` in a Server Component but it only works in Client Components."
+
+The fix is a pattern you will use in every app. "To use context, create a Client Component that accepts `children`". Then they tell you what to do with it. "Then, import it into a Server Component (e.g. `layout`)".
+
+```tsx
+// app/theme-provider.tsx
+"use client";
+
+import { createContext } from "react";
+
+export const ThemeContext = createContext("light");
+
+export default function ThemeProvider(props: { children: React.ReactNode }) {
+  return (
+    <ThemeContext.Provider value="dark">{props.children}</ThemeContext.Provider>
+  );
+}
+```
+
+The layout stays a Server Component and renders the provider around its children, so "all other Client Components throughout your app will be able to consume this context". The Module 3 trick does the work here. "You can pass Server Components as a prop to a Client Component." The wrapped tree keeps rendering on the server.
+
+One placement rule. "You should render providers as deep as possible in the tree". The docs' example wraps only `{children}`, never the whole `<html>` document, because "This makes it easier for Next.js to optimize the static parts of your Server Components."
+
+### Crossing the boundary
+
+Two rules govern the traffic. First, props must survive the trip. "Props passed to Client Components need to be serializable by React." The `use client` reference frames the wire: "the props need to be in a format that React can serialize when sending data from the server to the client". Plain data crosses fine. A function prop does not, the docs' example flags one as not serializable.
+
+Second, third-party components may need your stamp. A library component that uses state without the directive fails inside a Server Component, because "Next.js doesn't know `<Carousel />` is using client-only features." The fix: "you can wrap third-party components that rely on client-only features in your own Client Components". The wrapper file is just the directive plus a re-export.
+
+### The URL is state too
+
+Filters, search text, pagination, sort order. In a SPA these live in `useState` and die with the tab. Next.js offers a better home, the query string.
+
+On the server, when data depends on search params, "it's often a better option to read the `searchParams` prop of the corresponding Page". On the client, "useSearchParams is a Client Component hook that lets you read the current URL's query string", and it is "not supported in Server Components to prevent stale values during partial rendering". To write, "You can use `useRouter` or `Link` to set new `searchParams`." The docs' sort example pushes `?sort=asc` and the page receives the updated prop.
+
+The deeper framing lives in the official Learn course, not in the docs section. Same site, same authority. The course says "you'll be using URL search params to manage the search state" and lists the wins: "users can bookmark the current state of the application, including their search queries and filters", and URL parameters "can be directly consumed on the server to render the initial state".
+
+### In the repo (5 minutes)
+
+1. Visit `/examples/15-providers`. Click the toggle. The theme flips while the server timestamp line above it never changes.
+2. Open `src/app/(app)/examples/15-providers/page.tsx`. The provider wraps `<ThemePanel />` as children while the page stays a Server Component. Deep placement keeps the rest server rendered.
+3. Open `src/app/(app)/examples/15-providers/theme-provider.tsx`. `"use client"` sits on line one, `createContext` right below it.
+4. Open `src/app/(app)/examples/15-providers/theme-panel.tsx`. The `useTheme()` call marks the island. Only this island re-renders on toggle.
+
+### Module 7 references
+
+- T1 Server and Client Components: <https://nextjs.org/docs/app/getting-started/server-and-client-components>
+- T1 The use client directive: <https://nextjs.org/docs/app/api-reference/directives/use-client>
+- T1 createContext error page: <https://nextjs.org/docs/messages/context-in-server-component>
+- T1 useSearchParams: <https://nextjs.org/docs/app/api-reference/functions/use-search-params>
+- T1 Learn, search and pagination: <https://nextjs.org/learn/dashboard-app/adding-search-and-pagination>
